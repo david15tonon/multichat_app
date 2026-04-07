@@ -1,88 +1,90 @@
 # MultiChat 🌐💬
 
-**Application de messagerie multilingue avec traduction en temps réel et adaptation du ton selon le contexte.**
+**Multilingual messaging application with real-time translation and tone adaptation based on context.**
 
-![Status](https://img.shields.io/badge/status-en%20développement-yellow)
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
 ![React](https://img.shields.io/badge/React-18.2-blue)
 ![Python](https://img.shields.io/badge/Python-3.13+-green)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📋 Table des matières
+[🇫🇷 Français](./README.fr.md)
 
-- [🎯 Fonctionnalités](#-fonctionnalités)
+## 📋 Table of Contents
+
+- [🎯 Features](#-features)
 - [🏗️ Architecture](#-architecture)
-- [🚀 Démarrage rapide](#-démarrage-rapide)
-- [📁 Structure du projet](#-structure-du-projet)
+- [🚀 Quick Start](#-quick-start)
+- [📁 Project Structure](#-project-structure)
 - [🔧 Configuration](#-configuration)
-- [📦 Dépendances](#-dépendances)
-- [🌐 Déploiement](#-déploiement)
-- [👥 Contribution](#-contribution)
+- [📦 Dependencies](#-dependencies)
+- [🌐 Deployment](#-deployment)
+- [👥 Contributing](#-contributing)
 
-## 🎯 Fonctionnalités
+## 🎯 Features
 
-- **✨ Traduction en temps réel** - Traduction instantanée dans 9+ langues
-- **🎭 Adaptation du ton** - Casual, Standard, ou Formel selon le contexte
-- **📱 Design moderne** - Interface néo-brutaliste avec couleurs vives
-- **🌍 Multilingue** - Support complet de FR, EN, ES, DE, IT, PT, ZH, JA, AR
-- **🔐 Authentification sécurisée** - JWT + Refresh tokens
-- **💾 Base de données** - Supabase PostgreSQL avec ORM SQLAlchemy
-- **🔌 WebSocket** - Communication en temps réel
-- **☁️ Cloud-ready** - Déploiement sur Vercel
+- **✨ Real-time Translation** - Instant translation to 9+ languages
+- **🎭 Tone Adaptation** - Casual, Standard, or Formal based on context
+- **📱 Modern Design** - Neo-brutalist interface with vibrant colors
+- **🌍 Multilingual** - Full support for FR, EN, ES, DE, IT, PT, ZH, JA, AR
+- **🔐 Secure Authentication** - JWT + Refresh tokens
+- **💾 Database** - Supabase PostgreSQL with SQLAlchemy ORM
+- **🔌 WebSocket** - Real-time communication
+- **☁️ Cloud-ready** - Vercel deployment
 
 ## 🏗️ Architecture
 
-Le projet est divisé en deux parties :
+The project is divided into two parts:
 
 ```
 multichat/
-├── backend/           # API FastAPI + Services de traduction
+├── backend/           # FastAPI + Translation Services
 │   ├── app/
 │   │   ├── api/       # Endpoints (auth, conversations, messages)
-│   │   ├── core/      # Configuration, base de données, sécurité
-│   │   ├── models/    # Modèles SQLAlchemy
-│   │   └── schemas/   # Schémas Pydantic
-│   ├── main.py        # Point d'entrée
+│   │   ├── core/      # Config, database, security
+│   │   ├── models/    # SQLAlchemy models
+│   │   └── schemas/   # Pydantic schemas
+│   ├── main.py        # Entry point
 │   └── requirements.txt
 │
-└── frontend/          # Application React + TypeScript
+└── frontend/          # React + TypeScript App
     ├── src/
     │   ├── components/ # Atomic Design (atoms, molecules, organisms)
-    │   ├── pages/      # Pages principales
-    │   ├── services/   # Appels API
-    │   ├── types/      # Types TypeScript
-    │   └── styles/     # Thème global
+    │   ├── pages/      # Main pages
+    │   ├── services/   # API calls
+    │   ├── types/      # TypeScript types
+    │   └── styles/     # Global theme
     └── package.json
 ```
 
-## 🚀 Démarrage rapide
+## 🚀 Quick Start
 
-### Prérequis
+### Prerequisites
 
 - Node.js >= 18.0.0
 - Python >= 3.13
-- npm ou yarn
-- Compte Supabase (pour la base de données)
+- npm or yarn
+- Supabase account (for database)
 
 ### Installation
 
 ```bash
-# Cloner le repository
+# Clone the repository
 git clone https://github.com/david15tonon/multichat_app.git
 cd multichat
 
-# Installation Backend
+# Backend Installation
 cd backend
 python -m venv env
 source env/Scripts/activate  # Windows: env\Scripts\activate
 pip install -r requirements.txt
 
-# Installation Frontend
+# Frontend Installation
 cd ../frontend
 npm install
 ```
 
-### Lancer l'application
+### Running the Application
 
 ```bash
 # Backend (terminal 1)
@@ -95,24 +97,111 @@ cd frontend
 npm run dev
 ```
 
-L'application sera accessible sur `http://localhost:5173`
+The application will be accessible at `http://localhost:5173`
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 ### Backend
-- **Framework** : FastAPI
-- **Base de données** : Supabase (PostgreSQL)
-- **ORM** : SQLAlchemy
-- **Authentification** : JWT + Refresh tokens
-- **Traduction** : Service de traduction IA
+- **Framework**: FastAPI
+- **Database**: Supabase (PostgreSQL)
+- **ORM**: SQLAlchemy
+- **Authentication**: JWT + Refresh tokens
+- **Translation**: AI translation service
 
-Voir [backend/README.md](./backend/README.md) pour plus de détails.
+See [backend/README.md](./backend/README.md) for more details.
 
 ### Frontend
-- **Framework** : React 18.2
-- **Typage** : TypeScript 5.2
-- **Styling** : Styled Components 6.1
-- **Build** : Vite 5
-- **Architecture** : Atomic Design
+- **Framework**: React 18.2
+- **Typing**: TypeScript 5.2
+- **Styling**: Styled Components 6.1
+- **Build**: Vite 5
+- **Architecture**: Atomic Design
 
-Voir [frontend/README.md](./frontend/README.md) pour plus de détails.
+See [frontend/README.md](./frontend/README.md) for more details.
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the `backend/` folder:
+
+```env
+# Database
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_key
+
+# JWT
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+
+# CORS
+FRONTEND_URL=http://localhost:5173
+```
+
+## 📦 Main Dependencies
+
+### Backend
+- fastapi
+- sqlalchemy
+- supabase-py
+- python-jose[cryptography]
+- pydantic
+
+### Frontend
+- react
+- typescript
+- styled-components
+- axios
+- react-router-dom
+
+## 🌐 Deployment
+
+### Frontend (Vercel)
+
+```bash
+cd frontend
+vercel deploy
+```
+
+### Backend (Vercel)
+
+```bash
+cd backend
+vercel deploy
+```
+
+See [vercel.json](./vercel.json) for configuration.
+
+## 🧪 Tests
+
+```bash
+# Backend
+cd backend
+pytest
+
+# Frontend
+cd frontend
+npm run test
+```
+
+## 📝 License
+
+MIT - See [LICENSE](./LICENSE) for details.
+
+## 👥 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📧 Support
+
+For any questions or issues, open an issue on GitHub.
+
+---
+
+**Developed with ❤️ by [david15tonon](https://github.com/david15tonon)**
