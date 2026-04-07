@@ -1,13 +1,19 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "vite",
+  "version": 2,
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/backend/main.py"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/frontend/$1"
     }
-  ]
+  ],
+  "functions": {
+    "backend/main.py": {
+      "runtime": "vercel-python@3.9",
+      "maxDuration": 25
+    }
+  }
 }
