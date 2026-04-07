@@ -1,136 +1,138 @@
 # Frontend - MultiChat App 🎨
 
-**Application React moderne avec TypeScript, Styled Components et Atomic Design.**
+**Modern React application with TypeScript, Styled Components and Atomic Design.**
 
 ![React](https://img.shields.io/badge/React-18.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue)
 ![Vite](https://img.shields.io/badge/Vite-5-violet)
 ![Styled Components](https://img.shields.io/badge/Styled%20Components-6.1-pink)
 
-## 📋 Table des matières
+[🇫🇷 Français](./README.fr.md)
 
-- [🎯 Fonctionnalités](#-fonctionnalités)
+## 📋 Table of Contents
+
+- [🎯 Features](#-features)
 - [🏗️ Architecture](#-architecture)
 - [🚀 Installation](#-installation)
 - [📁 Structure](#-structure)
 - [🎨 Design System](#-design-system)
-- [🧩 Composants](#-composants)
+- [🧩 Components](#-components)
 - [📱 Pages](#-pages)
 - [🔧 Configuration](#-configuration)
-- [📦 Scripts npm](#-scripts-npm)
-- [🌐 Déploiement](#-déploiement)
+- [📦 npm Scripts](#-npm-scripts)
+- [🌐 Deployment](#-deployment)
 
-## 🎯 Fonctionnalités
+## 🎯 Features
 
-- **✨ Interface moderne** - Design néo-brutaliste avec couleurs vives
-- **🏗️ Atomic Design** - Architecture scalable et réutilisable
-- **📝 TypeScript strict** - Typage complet pour éviter les erreurs
-- **🎨 Styled Components** - CSS-in-JS modulaire
-- **⚡ Vite** - Build ultra-rapide et HMR
-- **🌍 Multilingue** - Support 9+ langues
-- **📱 Responsive** - Adapté mobile, tablet, desktop
-- **🔐 Authentification** - JWT avec tokens
+- **✨ Modern Interface** - Neo-brutalist design with vibrant colors
+- **🏗️ Atomic Design** - Scalable and reusable architecture
+- **📝 Strict TypeScript** - Full typing to avoid errors
+- **🎨 Styled Components** - Modular CSS-in-JS
+- **⚡ Vite** - Ultra-fast build and HMR
+- **🌍 Multilingual** - Support for 9+ languages
+- **📱 Responsive** - Mobile, tablet, desktop optimized
+- **🔐 Authentication** - JWT with tokens
 
 ## 🏗️ Architecture
 
-L'application suit le pattern **Atomic Design** pour une meilleure organisation :
+The application follows the **Atomic Design** pattern for better organization:
 
 ```
-Atom (plus petit)
+Atom (smallest)
   ↓
-Molecule (combinaison d'atoms)
+Molecule (combination of atoms)
   ↓
-Organism (sections complètes)
+Organism (complete sections)
   ↓
-Page (compositions d'organisms)
+Page (compositions of organisms)
 ```
 
 ## 🚀 Installation
 
-### Prérequis
+### Prerequisites
 
 - Node.js >= 18.0.0
-- npm >= 9.0.0 ou yarn >= 3.0.0
+- npm >= 9.0.0 or yarn >= 3.0.0
 
 ### Setup
 
 ```bash
-# 1. Naviguer au dossier frontend
+# 1. Navigate to frontend folder
 cd frontend
 
-# 2. Installer les dépendances
+# 2. Install dependencies
 npm install
 
-# 3. Lancer en mode développement
+# 3. Launch in development mode
 npm run dev
 
-# 4. Ouvrir http://localhost:5173
+# 4. Open http://localhost:5173
 ```
 
 ## 📁 Structure
 
 ```
 frontend/
-├── public/                    # Assets statiques
+├── public/                    # Static assets
 ├── src/
-│   ├── index.tsx             # Point d'entrée React
-│   ├── App.tsx               # Composant principal
+│   ├── index.tsx             # React entry point
+│   ├── App.tsx               # Main component
 │   ├── components/
-│   │   ├── atoms/            # Composants de base
+│   │   ├── atoms/            # Basic components
 │   │   │   ├── Button.tsx
 │   │   │   ├── Input.tsx
 │   │   │   ├── Icon.tsx
 │   │   │   ├── Avatar.tsx
 │   │   │   ├── Badge.tsx
 │   │   │   └── index.ts       # Barrel export
-│   │   ├── molecules/         # Composants composés
+│   │   ├── molecules/         # Composed components
 │   │   │   ├── MessageBubble.tsx
 │   │   │   ├── ToneSelector.tsx
 │   │   │   ├── LanguagePicker.tsx
 │   │   │   └── index.ts
-│   │   └── organisms/         # Sections complètes
+│   │   └── organisms/         # Complete sections
 │   │       ├── Header.tsx
 │   │       ├── MessageComposer.tsx
 │   │       └── index.ts
-│   ├── pages/                 # Pages complètes
+│   ├── pages/                 # Complete pages
 │   │   ├── LoginPage.tsx
 │   │   ├── ChatPage.tsx
 │   │   ├── SettingsPage.tsx
 │   │   ├── ForgotPassword.tsx
 │   │   ├── SignupPage.tsx
 │   │   └── index.ts
-│   ├── services/              # Services API
-│   │   └── api.ts             # Appels HTTP/Axios
-│   ├── types/                 # Types TypeScript
-│   │   └── index.ts           # Types partagés
-│   └── styles/                # Styles globaux
+│   ├── services/              # API services
+│   │   └── api.ts             # HTTP calls
+│   ├── types/                 # TypeScript types
+│   │   └── index.ts           # Shared types
+│   └── styles/                # Global styles
 │       ├── GlobalStyles.ts
-│       ├── theme.ts           # Configuration thème
-│       └── styled.d.ts        # Types styled-components
-├── index.html                 # HTML racine
+│       ├── theme.ts           # Theme config
+│       └── styled.d.ts        # Styled types
+├── index.html                 # Root HTML
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.node.json
-├── vite.config.ts            # Configuration Vite
-└── vercel.json               # Configuration Vercel
+├── vite.config.ts            # Vite config
+└── vercel.json               # Vercel config
 ```
 
 ## 🎨 Design System
 
-### Palette de couleurs
+### Color Palette
 
 ```typescript
 // src/styles/theme.ts
 
 const colors = {
   primary: {
-    yellow: "#FDB924",    // Énergie et optimisme
-    orange: "#FF6B35",    // Chaleur et dynamisme
-    purple: "#6C5CE7",    // Innovation et créativité
+    yellow: "#FDB924",    // Energy and optimism
+    orange: "#FF6B35",    // Warmth and dynamism
+    purple: "#6C5CE7",    // Innovation and creativity
   },
   neutral: {
-    black: "#000000",     // Texte et bordures
-    white: "#F5F5F0",     // Arrière-plan
+    black: "#000000",     // Text and borders
+    white: "#F5F5F0",     // Background
     gray: "#8B8B8B",
   },
   semantic: {
@@ -142,7 +144,7 @@ const colors = {
 };
 ```
 
-### Typographie
+### Typography
 
 ```typescript
 const typography = {
@@ -162,7 +164,7 @@ const typography = {
 };
 ```
 
-### Espacements
+### Spacing
 
 ```typescript
 const spacing = {
@@ -175,7 +177,7 @@ const spacing = {
 };
 ```
 
-## 🧩 Composants
+## 🧩 Components
 
 ### Atoms
 
@@ -185,7 +187,7 @@ const spacing = {
 import { Button } from "@/components/atoms";
 
 // Default
-<Button>Cliquez-moi</Button>
+<Button>Click me</Button>
 
 // Variants
 <Button variant="primary">Primary</Button>
@@ -217,8 +219,8 @@ import { Input } from "@/components/atoms";
 
 <Input 
   type="password"
-  placeholder="Mot de passe"
-  error="Mot de passe invalide"
+  placeholder="Password"
+  error="Invalid password"
 />
 ```
 
@@ -229,7 +231,7 @@ import { Avatar } from "@/components/atoms";
 
 <Avatar 
   src="https://..."
-  alt="Utilisateur"
+  alt="User"
   size="lg"
   online={true}
 />
@@ -245,7 +247,7 @@ import { MessageBubble } from "@/components/molecules";
 <MessageBubble
   message={{
     id: "1",
-    content: "Bonjour !",
+    content: "Hello!",
     sender: "Alice",
     timestamp: new Date(),
     tone: "casual",
@@ -272,7 +274,7 @@ import { ToneSelector } from "@/components/molecules";
 import { LanguagePicker } from "@/components/molecules";
 
 <LanguagePicker
-  selected="fr"
+  selected="en"
   onChange={(lang) => setLanguage(lang)}
 />
 ```
@@ -305,73 +307,73 @@ import { MessageComposer } from "@/components/organisms";
 
 ### LoginPage
 
-- Formulaire email/mot de passe
-- Connexion sociale (Google, Apple, Twitter)
-- Lien vers inscription et réinitialisation
+- Email/password form
+- Social login (Google, Apple, Twitter)
+- Link to signup and password reset
 
-**Route** : `/login`
+**Route**: `/login`
 
 ### SignupPage
 
-- Formulaire d'inscription
-- Validation email
-- Confirmation mot de passe
+- Signup form
+- Email validation
+- Password confirmation
 
-**Route** : `/signup`
+**Route**: `/signup`
 
 ### ChatPage
 
-- Liste des conversations
-- Zone de messages
-- Sélecteur de ton
-- Traduction en temps réel
+- Conversation list
+- Message area
+- Tone selector
+- Real-time translation
 
-**Route** : `/chat` (protégée)
+**Route**: `/chat` (protected)
 
 ### SettingsPage
 
-- Sélection de langue
-- Configuration du ton
-- Profil utilisateur
+- Language selection
+- Tone configuration
+- User profile
 
-**Route** : `/settings` (protégée)
+**Route**: `/settings` (protected)
 
 ### ForgotPassword
 
-- Réinitialisation par email
-- Confirmation par token
+- Password reset by email
+- Token confirmation
 
-**Route** : `/forgot-password`
+**Route**: `/forgot-password`
 
 ## 🔧 Configuration
 
-### Variables d'environnement
+### Environment Variables
 
-Créez un fichier `.env.local` :
+Create a `.env.local` file:
 
 ```env
 VITE_API_URL=http://localhost:8000
 VITE_DEBUG=true
 ```
 
-### Thème
+### Theme
 
-Modifiez `src/styles/theme.ts` pour personnaliser :
+Modify `src/styles/theme.ts` to customize:
 
 ```typescript
 export const colors = {
-  // Vos couleurs
+  // Your colors
 };
 
 export const theme = {
   colors,
-  // Autres configurations
+  // Other config
 };
 ```
 
 ### Axios/API
 
-`src/services/api.ts` :
+`src/services/api.ts`:
 
 ```typescript
 import axios from "axios";
@@ -380,7 +382,7 @@ export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Intercepteur pour le token JWT
+// Interceptor for JWT token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -390,42 +392,42 @@ api.interceptors.request.use((config) => {
 });
 ```
 
-## 📦 Scripts npm
+## 📦 npm Scripts
 
 ```bash
-# Développement
-npm run dev              # Démarrer Vite
+# Development
+npm run dev              # Start Vite
 
 # Build
-npm run build            # Build production
-npm run build:lib        # Build library
+npm run build            # Production build
+npm run build:lib        # Library build
 
 # Preview
-npm run preview          # Prévisualiser le build
+npm run preview          # Preview build
 
-# Qualité du code
+# Code Quality
 npm run lint             # ESLint
 npm run format           # Prettier
 npm run typecheck        # TypeScript check
 
 # Tests
-npm run test             # Lancer tests
+npm run test             # Run tests
 npm run test:ui          # Vitest UI
-npm run coverage         # Couverture tests
+npm run coverage         # Test coverage
 
-# Déploiement
-npm run deploy           # Déployer sur Vercel
+# Deployment
+npm run deploy           # Deploy to Vercel
 ```
 
-## 🌐 Déploiement
+## 🌐 Deployment
 
-### Vercel (recommandé)
+### Vercel (recommended)
 
 ```bash
-# Installation CLI Vercel
+# Install Vercel CLI
 npm install -g vercel
 
-# Déployer
+# Deploy
 vercel
 
 # Production
@@ -438,7 +440,7 @@ vercel --prod
 # Build
 npm run build
 
-# Déployer avec gh-pages
+# Deploy with gh-pages
 npm run deploy
 ```
 
@@ -470,17 +472,17 @@ docker run -p 3000:3000 multichat-frontend
 ### Vitest + React Testing Library
 
 ```bash
-# Lancer les tests
+# Run tests
 npm run test
 
-# Mode watch
+# Watch mode
 npm run test:watch
 
-# Avec couverture
+# With coverage
 npm run coverage
 ```
 
-### Structure des tests
+### Test Structure
 
 ```
 src/__tests__/
@@ -491,16 +493,16 @@ src/__tests__/
 └── pages/
 ```
 
-## 📖 Conventions de code
+## 📖 Code Conventions
 
-### Nommage des fichiers
+### File Naming
 
-- **Composants** : `PascalCase` (Button.tsx)
-- **Hooks** : `camelCase` (useAuth.ts)
-- **Services** : `camelCase` (authService.ts)
-- **Types** : `PascalCase` (User.ts)
+- **Components**: `PascalCase` (Button.tsx)
+- **Hooks**: `camelCase` (useAuth.ts)
+- **Services**: `camelCase` (authService.ts)
+- **Types**: `PascalCase` (User.ts)
 
-### Structure des composants
+### Component Structure
 
 ```typescript
 import styled from "styled-components";
@@ -523,11 +525,11 @@ export const Button: FC<Props> = ({ label, onClick }) => {
 ### Imports
 
 ```typescript
-// 1. React/libs externes
+// 1. React/external libs
 import { FC } from "react";
 import styled from "styled-components";
 
-// 2. Composants locaux
+// 2. Local components
 import { Header } from "@/components/organisms";
 
 // 3. Hooks/utils
@@ -537,7 +539,7 @@ import { useAuth } from "@/hooks";
 import { User } from "@/types";
 ```
 
-## 🔗 Ressources
+## 🔗 Resources
 
 - [React Docs](https://react.dev)
 - [TypeScript Docs](https://www.typescriptlang.org/docs/)
@@ -545,21 +547,21 @@ import { User } from "@/types";
 - [Vite Docs](https://vitejs.dev/)
 - [Atomic Design](https://atomicdesign.bradfrost.com/)
 
-## 💡 Conseils
+## 💡 Tips
 
-- Utilisez les barrel exports (`index.ts`) pour simplifier les imports
-- Documentez vos composants avec des commentaires JSDoc
-- Testez régulièrement vos composants
-- Respectez l'Atomic Design pour la scalabilité
-- Utilisez des variables CSS pour les thèmes
+- Use barrel exports (`index.ts`) to simplify imports
+- Document components with JSDoc comments
+- Test regularly
+- Respect Atomic Design for scalability
+- Use CSS variables for themes
 
 ## 👥 Support
 
-Pour des questions ou problèmes :
-1. Consultez la documentation Vite/React
-2. Vérifiez la console du navigateur
-3. Ouvrez une issue sur GitHub
+For questions or issues:
+1. Check Vite/React documentation
+2. Verify browser console
+3. Open an issue on GitHub
 
 ---
 
-**Développé avec ❤️ pour MultiChat**
+**Developed with ❤️ for MultiChat**
