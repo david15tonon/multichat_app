@@ -6,10 +6,11 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { ChatPage } from './pages/ChatPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { FriendsPage } from './pages/FriendsPage';
 import { Message, MessageTone, Language } from './types';
-import { translationAPI, healthAPI, authAPI } from './services/api';
+import { translationAPI, healthAPI, authAPI, messagesAPI } from './services/api';
 
-type AppScreen = 'login' | 'signup' | 'chat' | 'settings';
+type AppScreen = 'login' | 'signup' | 'chat' | 'settings' | 'friends';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -26,6 +27,9 @@ interface AuthState {
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('login');
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
+  const [currentContactName, setCurrentContactName] = useState<string>('Chat');
+  const [currentContactId, setCurrentContactId] = useState<string | null>(null);
   const [language, setLanguage] = useState<Language>('fr');
   const [tone, setTone] = useState<MessageTone>('standard');
   const [messages, setMessages] = useState<Message[]>([
@@ -88,7 +92,7 @@ function App() {
             error: null,
           });
           setLanguage(user.preferred_language as Language);
-          setCurrentScreen('chat');
+          setCurrentScreen('friends');
         } catch (error) {
           localStorage.removeItem('access_token');
           setAuth({
@@ -98,6 +102,7 @@ function App() {
             loading: false,
             error: null,
           });
+          setCurrentScreen('login');
           setCurrentScreen('login');
         }
       } else {
@@ -118,6 +123,13 @@ function App() {
         console.error('❌ Backend connection failed:', error.message);
       });
   }, []);
+
+  // Protect routes: redirect authenticated users away from login/signup
+  useEffect(() => {
+    if (auth.isAuthenticated && (currentScreen === 'login' || currentScreen === 'signup')) {
+      setCurrentScreen('friends');
+    }
+  }, [auth.isAuthenticated, currentScreen]);
 
   const handleLogin = async (email: string, password: string) => {
     setAuth((prev) => ({ ...prev, loading: true, error: null }));
@@ -141,7 +153,7 @@ function App() {
         error: null,
       });
       setLanguage(user.preferred_language as Language);
-      setCurrentScreen('chat');
+      setCurrentScreen('friends');
     } catch (error: any) {
       setAuth((prev) => ({
         ...prev,
@@ -173,7 +185,7 @@ function App() {
         error: null,
       });
       setLanguage(user.preferred_language as Language);
-      setCurrentScreen('chat');
+      setCurrentScreen('friends');
     } catch (error: any) {
       setAuth((prev) => ({
         ...prev,
@@ -199,14 +211,31 @@ function App() {
     setCurrentScreen('settings');
   }
 
+  const handleChatClick = () => {
+    setCurrentScreen('chat');
+  }
+
+  const handleConversationCreated = (conversationId: string, contactName: string, contactId: string) => {
+    console.log('handleConversationCreated called with ID:', conversationId, 'contactName:', contactName, 'contactId:', contactId);
+    setCurrentConversationId(conversationId);
+    setCurrentContactName(contactName);
+    setCurrentContactId(contactId);
+    setCurrentScreen('chat');
+  }
+
   const handleSendMessage = async (content: string, messageTone: MessageTone) => {
-    // Determine target language for translation
+    // Determine target language for translation (opposite of current language)
     const targetLanguage: Language = language === 'fr' ? 'en' : 'fr';
+
+    if (!currentConversationId || !auth.token) {
+      console.error('Missing conversation ID or token');
+      return;
+    }
 
     const newMessage: Message = {
       id: Date.now().toString(),
-      senderId: 'user-1',
-      receiverId: 'contact-1',
+      senderId: auth.user?.id || 'user-1',
+      receiverId: currentContactId || 'contact-1',
       content,
       originalLanguage: language,
       targetLanguage,
@@ -220,29 +249,40 @@ function App() {
     setIsTranslating(true);
 
     try {
-      const result = await translationAPI.translate(content, targetLanguage, messageTone);
+      // Send message via API (handles translation automatically)
+      const result = await messagesAPI.send(
+        auth.token,
+        currentConversationId,
+        content,
+        language,
+        messageTone,
+        targetLanguage
+      );
+      
+      console.log('Message sent successfully:', result);
       
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === newMessage.id
             ? {
                 ...msg,
+                id: result.id,
                 status: 'sent',
-                translationStatus: 'translated',
-                translatedContent: result.translated_text,
+                translationStatus: result.translation_status === 'done' ? 'translated' : 'translating',
+                translatedContent: result.translated_content,
               }
             : msg
         )
       );
       setIsTranslating(false);
     } catch (error) {
-      console.error('Translation error:', error);
+      console.error('Error sending message:', error);
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === newMessage.id
             ? {
                 ...msg,
-                status: 'sent',
+                status: 'failed',
                 translationStatus: 'failed',
               }
             : msg
@@ -291,15 +331,27 @@ function App() {
         />
       )}
 
+      {auth.isAuthenticated && currentScreen === 'friends' && (
+        <FriendsPage
+          userName={auth.user?.fullName || 'Utilisateur'}
+          userId={auth.user?.id}
+          onChatClick={handleChatClick}
+          onSettingsClick={handleSettingsClick}
+          onLogout={handleLogout}
+          onConversationCreated={handleConversationCreated}
+        />
+      )}
+
       {auth.isAuthenticated && currentScreen === 'chat' && (
         <ChatPage
           currentUserId={auth.user?.id || 'user-1'}
-          contactName="Elena"
+          conversationId={currentConversationId || ''}
+          contactName={currentContactName}
           contactAvatar=""
           isOnline={true}
           messages={messages}
           onSendMessage={handleSendMessage}
-          onBackClick={handleLogout}
+          onBackClick={() => setCurrentScreen('friends')}
           onSettingsClick={handleSettingsClick}
           isConnected={backendConnected}
           showSettingsButton={true}
@@ -312,7 +364,7 @@ function App() {
           tone={tone}
           onLanguageChange={setLanguage}
           onToneChange={setTone}
-          onBackClick={() => setCurrentScreen('chat')}
+          onBackClick={() => setCurrentScreen('friends')}
         />
       )}
     </ThemeProvider>

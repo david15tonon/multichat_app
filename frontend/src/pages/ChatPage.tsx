@@ -4,9 +4,11 @@ import { Message, MessageTone } from '../types';
 import { Header } from '../components/organisms/Header';
 import { MessageComposer } from '../components/organisms/MessageComposer';
 import { MessageBubble } from '../components/molecules/MessageBubble';
+import { messagesAPI } from '../services/api';
 
 export interface ChatPageProps {
   currentUserId: string;
+  conversationId: string;
   contactName: string;
   contactAvatar?: string;
   isOnline?: boolean;
@@ -139,6 +141,7 @@ const VideoCallButton = styled.button`
 
 export const ChatPage: React.FC<ChatPageProps> = ({
   currentUserId,
+  conversationId,
   contactName,
   contactAvatar,
   isOnline = true,
@@ -151,7 +154,51 @@ export const ChatPage: React.FC<ChatPageProps> = ({
   onSettingsClick,
 }) => {
   const [showError, setShowError] = useState(false);
+  const [loadedMessages, setLoadedMessages] = useState<Message[]>(messages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load messages from API when conversation changes
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (!conversationId) return;
+      
+      try {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          throw new Error('Token not found');
+        }
+
+        const apiMessages = await messagesAPI.listByConversation(token, conversationId);
+        setLoadedMessages(
+          apiMessages.map((msg: any) => ({
+            id: msg.id,
+            senderId: msg.sender_id,
+            receiverId: msg.sender_id === currentUserId ? 'other' : currentUserId,
+            content: msg.content,
+            originalLanguage: msg.original_language,
+            translatedContent: msg.translated_content,
+            targetLanguage: msg.target_language,
+            tone: msg.tone,
+            timestamp: new Date(msg.created_at),
+            status: msg.status.toLowerCase() === 'sent' ? 'sent' : msg.status.toLowerCase(),
+            translationStatus: msg.translation_status.toLowerCase() === 'done' ? 'translated' : 'translating',
+          }))
+        );
+      } catch (error) {
+        console.error('Error loading messages:', error);
+        setLoadedMessages(messages);
+      }
+    };
+
+    loadMessages();
+  }, [conversationId, currentUserId]);
+
+  // Update loadedMessages when messages prop changes
+  useEffect(() => {
+    if (messages.length > loadedMessages.length) {
+      setLoadedMessages(messages);
+    }
+  }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -163,11 +210,11 @@ export const ChatPage: React.FC<ChatPageProps> = ({
 
   // Check for translation errors
   useEffect(() => {
-    const hasError = messages.some((msg) => msg.translationStatus === 'failed');
+    const hasError = loadedMessages.some((msg) => msg.translationStatus === 'failed');
     if (hasError && isConnected === false) {
       setShowError(true);
     }
-  }, [messages, isConnected]);
+  }, [loadedMessages, isConnected]);
 
   const groupMessagesByDate = (messages: Message[]) => {
     const groups: { [key: string]: Message[] } = {};
@@ -181,13 +228,13 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     return groups;
   };
 
-  const messageGroups = groupMessagesByDate(messages);
+  const messageGroups = groupMessagesByDate(loadedMessages);
 
   return (
     <Container>
       <Header
          title={contactName}
-         subtitle="EN LIGNE"
+         subtitle=" "
          showBackButton
          showSettingsButton={showSettingsButton}
          onSettingsClick={onSettingsClick}

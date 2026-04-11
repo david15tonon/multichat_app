@@ -149,7 +149,7 @@ export const conversationsAPI = {
     name: string,
     isGroup: boolean,
     participantIds?: string[]
-  ): Promise<{ id: string; name: string }> {
+  ): Promise<{ id: string; name: string; is_group: boolean }> {
     const response = await fetch(`${API_URL}/conversations`, {
       method: 'POST',
       headers: {
@@ -164,7 +164,12 @@ export const conversationsAPI = {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create conversation');
+      try {
+        const error = await response.json();
+        throw new Error(error.detail || 'Failed to create conversation');
+      } catch {
+        throw new Error('Failed to create conversation');
+      }
     }
 
     return response.json();
@@ -181,11 +186,15 @@ export const messagesAPI = {
   ): Promise<
     Array<{
       id: string;
+      sender_id: string;
       content: string;
       original_language: string;
       translated_content?: string;
       target_language?: string;
       tone: string;
+      status: string;
+      translation_status: string;
+      created_at: string;
     }>
   > {
     const response = await fetch(
@@ -212,7 +221,12 @@ export const messagesAPI = {
     originalLanguage: string,
     tone: string,
     targetLanguage?: string
-  ): Promise<{ id: string; status: string }> {
+  ): Promise<{ 
+    id: string
+    status: string
+    translated_content: string | null
+    translation_status: string
+  }> {
     const response = await fetch(
       `${API_URL}/conversations/${conversationId}/messages`,
       {
@@ -250,6 +264,42 @@ export const healthAPI = {
 
     if (!response.ok) {
       throw new Error('Backend is not available');
+    }
+
+    return response.json();
+  },
+};
+
+/**
+ * Users API
+ */
+export const usersAPI = {
+  async searchUsers(
+    token: string,
+    query?: string
+  ): Promise<
+    Array<{
+      id: string;
+      email: string;
+      full_name: string;
+      preferred_language: string;
+    }>
+  > {
+    const url = new URL(`${API_URL}/users/search`);
+    if (query) {
+      url.searchParams.append('q', query);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to search users');
     }
 
     return response.json();

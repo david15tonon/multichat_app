@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from sqlalchemy import Enum, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
@@ -22,6 +23,7 @@ class Message(Base):
     tone: Mapped[ToneEnum] = mapped_column(Enum(ToneEnum), nullable=False)
     status: Mapped[MessageStatusEnum] = mapped_column(Enum(MessageStatusEnum), default=MessageStatusEnum.SENDING, nullable=False)
     translation_status: Mapped[TranslationStatusEnum] = mapped_column(Enum(TranslationStatusEnum), default=TranslationStatusEnum.PENDING, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False, index=True)
 
     conversation = relationship("Conversation", back_populates="messages")
     sender = relationship("User", back_populates="messages")
